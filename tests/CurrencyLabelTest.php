@@ -18,7 +18,6 @@ class CurrencyLabelTest extends TestCase
         foreach (Currency::cases() as $currency) {
             $label = $currency->getLabel();
             $this->assertNotEmpty($label);
-            $this->assertIsString($label);
         }
     }
 

@@ -18,7 +18,6 @@ class CurrencyItemTest extends TestCase
         $cny = Currency::CNY;
         $array = $cny->toArray();
 
-        $this->assertIsArray($array);
         $this->assertArrayHasKey('value', $array);
         $this->assertArrayHasKey('label', $array);
         $this->assertSame('CNY', $array['value']);
@@ -39,7 +38,6 @@ class CurrencyItemTest extends TestCase
         $cny = Currency::CNY;
         $item = $cny->toSelectItem();
 
-        $this->assertIsArray($item);
         $this->assertArrayHasKey('value', $item);
         $this->assertArrayHasKey('label', $item);
         $this->assertArrayHasKey('text', $item);

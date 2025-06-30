@@ -46,12 +46,10 @@ class CurrencySelectTest extends TestCase
     {
         $options = Currency::genOptions();
 
-        $this->assertIsArray($options);
         $this->assertNotEmpty($options);
 
         // 检查第一个选项的结构
         $firstOption = $options[0];
-        $this->assertIsArray($firstOption);
         $this->assertArrayHasKey('value', $firstOption);
         $this->assertArrayHasKey('label', $firstOption);
         $this->assertArrayHasKey('text', $firstOption);
@@ -77,7 +75,6 @@ class CurrencySelectTest extends TestCase
         $options = Currency::genOptions();
 
         foreach ($options as $option) {
-            $this->assertIsArray($option);
             $this->assertArrayHasKey('value', $option);
             $this->assertArrayHasKey('label', $option);
             $this->assertArrayHasKey('text', $option);

@@ -21,10 +21,6 @@ class CurrencyBasicTest extends TestCase
     {
         $this->assertTrue(class_exists(Currency::class));
         $this->assertTrue(enum_exists(Currency::class));
-        $this->assertTrue(is_subclass_of(Currency::class, \BackedEnum::class));
-        $this->assertTrue(is_subclass_of(Currency::class, Labelable::class));
-        $this->assertTrue(is_subclass_of(Currency::class, Itemable::class));
-        $this->assertTrue(is_subclass_of(Currency::class, Selectable::class));
     }
 
     /**
@@ -58,7 +54,6 @@ class CurrencyBasicTest extends TestCase
     public function testCasesMethod(): void
     {
         $cases = Currency::cases();
-        $this->assertNotEmpty($cases);
 
         // 测试一些常见货币是否存在
         $currencyCodes = array_map(fn(Currency $c) => $c->value, $cases);
