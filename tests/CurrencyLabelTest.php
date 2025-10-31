@@ -1,14 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\GBT12406\Tests;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tourze\GBT12406\Currency;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 
 /**
  * Currency 枚举标签功能测试
+ *
+ * @internal
  */
-class CurrencyLabelTest extends TestCase
+#[CoversClass(Currency::class)]
+final class CurrencyLabelTest extends AbstractEnumTestCase
 {
     /**
      * 验证所有货币的标签都不为空
@@ -90,7 +96,7 @@ class CurrencyLabelTest extends TestCase
             'RUB' => '俄罗斯卢布',
             'INR' => '印度卢比',
             'BRL' => '巴西雷亚尔',
-            'ZAR' => '南非兰特'
+            'ZAR' => '南非兰特',
         ];
 
         foreach ($sampleCurrencies as $code => $expectedLabel) {
@@ -98,4 +104,22 @@ class CurrencyLabelTest extends TestCase
             $this->assertSame($expectedLabel, $currency->getLabel());
         }
     }
+
+    /**
+     * 测试 toArray() 方法
+     */
+    public function testToArray(): void
+    {
+        $eur = Currency::EUR;
+        $array = $eur->toArray();
+
+        $this->assertArrayHasKey('value', $array);
+        $this->assertArrayHasKey('label', $array);
+        $this->assertSame('EUR', $array['value']);
+        $this->assertSame('欧元', $array['label']);
+    }
+
+    /**
+     * 测试 toSelectItem() 方法
+     */
 }

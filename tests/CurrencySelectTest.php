@@ -1,32 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\GBT12406\Tests;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tourze\GBT12406\Currency;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 
 /**
  * Currency 枚举选择功能测试
+ *
+ * @internal
  */
-class CurrencySelectTest extends TestCase
+#[CoversClass(Currency::class)]
+final class CurrencySelectTest extends AbstractEnumTestCase
 {
     /**
      * 原始环境变量
-     *
-     * @var array
      */
+    /** @var array<string, mixed> */
     private array $originalEnv = [];
-
-    /**
-     * 测试前恢复环境变量状态
-     */
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        // 保存原始的 $_ENV 变量，以便在测试后恢复
-        $this->originalEnv = $_ENV;
-    }
 
     /**
      * 测试后恢复环境变量状态
@@ -81,6 +75,7 @@ class CurrencySelectTest extends TestCase
             $this->assertArrayHasKey('name', $option);
 
             // 值应该是三个大写字母
+            $this->assertIsString($option['value']);
             $this->assertMatchesRegularExpression('/^[A-Z]{3}$/', $option['value']);
 
             // 标签、文本和名称应该是相同的
@@ -138,7 +133,7 @@ class CurrencySelectTest extends TestCase
         $filteredOptions = Currency::genOptions();
 
         // 应该比原来少三个选项
-        $this->assertEquals($allCount - 3, count($filteredOptions));
+        $this->assertCount($allCount - 3, $filteredOptions);
 
         // 确认这三个货币不在选项中
         $values = array_column($filteredOptions, 'value');
@@ -146,4 +141,22 @@ class CurrencySelectTest extends TestCase
         $this->assertNotContains('USD', $values);
         $this->assertNotContains('EUR', $values);
     }
+
+    /**
+     * 测试 toArray() 方法
+     */
+    public function testToArray(): void
+    {
+        $gbp = Currency::GBP;
+        $array = $gbp->toArray();
+
+        $this->assertArrayHasKey('value', $array);
+        $this->assertArrayHasKey('label', $array);
+        $this->assertSame('GBP', $array['value']);
+        $this->assertSame('英镑', $array['label']);
+    }
+
+    /**
+     * 测试 toSelectItem() 方法
+     */
 }

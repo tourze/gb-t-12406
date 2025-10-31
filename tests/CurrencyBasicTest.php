@@ -1,25 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\GBT12406\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Tourze\EnumExtra\Itemable;
-use Tourze\EnumExtra\Labelable;
-use Tourze\EnumExtra\Selectable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tourze\GBT12406\Currency;
-use ValueError;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 
 /**
  * Currency 枚举基本功能测试
+ *
+ * @internal
  */
-class CurrencyBasicTest extends TestCase
+#[CoversClass(Currency::class)]
+final class CurrencyBasicTest extends AbstractEnumTestCase
 {
     /**
      * 测试枚举类存在且实现了预期接口
      */
     public function testEnumExists(): void
     {
-        $this->assertTrue(class_exists(Currency::class));
         $this->assertTrue(enum_exists(Currency::class));
     }
 
@@ -40,7 +41,7 @@ class CurrencyBasicTest extends TestCase
     public function testAllCurrencyCodesUnique(): void
     {
         $currencyCodes = array_map(
-            fn(Currency $currency) => $currency->value,
+            fn (Currency $currency) => $currency->value,
             Currency::cases()
         );
 
@@ -56,7 +57,7 @@ class CurrencyBasicTest extends TestCase
         $cases = Currency::cases();
 
         // 测试一些常见货币是否存在
-        $currencyCodes = array_map(fn(Currency $c) => $c->value, $cases);
+        $currencyCodes = array_map(fn (Currency $c) => $c->value, $cases);
         $this->assertContains('CNY', $currencyCodes);
         $this->assertContains('USD', $currencyCodes);
         $this->assertContains('EUR', $currencyCodes);
@@ -83,7 +84,7 @@ class CurrencyBasicTest extends TestCase
      */
     public function testFromInvalidValue(): void
     {
-        $this->expectException(ValueError::class);
+        $this->expectException(\ValueError::class);
         Currency::from('INVALID');
     }
 
@@ -92,7 +93,25 @@ class CurrencyBasicTest extends TestCase
      */
     public function testCaseInsensitivity(): void
     {
-        $this->expectException(ValueError::class);
+        $this->expectException(\ValueError::class);
         Currency::from('cny');
     }
+
+    /**
+     * 测试 toArray() 方法
+     */
+    public function testToArray(): void
+    {
+        $cny = Currency::CNY;
+        $array = $cny->toArray();
+
+        $this->assertArrayHasKey('value', $array);
+        $this->assertArrayHasKey('label', $array);
+        $this->assertSame('CNY', $array['value']);
+        $this->assertSame('人民币', $array['label']);
+    }
+
+    /**
+     * 测试 toSelectItem() 方法
+     */
 }

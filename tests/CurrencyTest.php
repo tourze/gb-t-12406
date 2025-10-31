@@ -1,11 +1,18 @@
 <?php
 
-namespace Tourze\GBT12406\Tests\Unit;
+declare(strict_types=1);
 
-use PHPUnit\Framework\TestCase;
+namespace Tourze\GBT12406\Tests;
+
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tourze\GBT12406\Currency;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 
-class CurrencyTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(Currency::class)]
+final class CurrencyTest extends AbstractEnumTestCase
 {
     public function testEnumHasCorrectValues(): void
     {
@@ -37,8 +44,30 @@ class CurrencyTest extends TestCase
     {
         $currency = Currency::tryFrom('EUR');
         $this->assertSame(Currency::EUR, $currency);
-        
-        $invalid = Currency::tryFrom('INVALID');
-        $this->assertNull($invalid);
     }
+
+    public function testTryFromInvalidValue(): void
+    {
+        $result = Currency::tryFrom('INVALID');
+        /** @phpstan-ignore-next-line This test verifies expected null return behavior */
+        $this->assertNull($result, 'tryFrom should return null for invalid currency code');
+    }
+
+    /**
+     * 测试 toArray() 方法
+     */
+    public function testToArray(): void
+    {
+        $hkd = Currency::HKD;
+        $array = $hkd->toArray();
+
+        $this->assertArrayHasKey('value', $array);
+        $this->assertArrayHasKey('label', $array);
+        $this->assertSame('HKD', $array['value']);
+        $this->assertSame('港元', $array['label']);
+    }
+
+    /**
+     * 测试 toSelectItem() 方法
+     */
 }

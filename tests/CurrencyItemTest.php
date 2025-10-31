@@ -1,14 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\GBT12406\Tests;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Tourze\GBT12406\Currency;
+use Tourze\PHPUnitEnum\AbstractEnumTestCase;
 
 /**
  * Currency 枚举项目转换功能测试
+ *
+ * @internal
  */
-class CurrencyItemTest extends TestCase
+#[CoversClass(Currency::class)]
+final class CurrencyItemTest extends AbstractEnumTestCase
 {
     /**
      * 验证 toArray() 方法返回正确结构
@@ -60,7 +66,7 @@ class CurrencyItemTest extends TestCase
             Currency::GBP,
             Currency::JPY,
             Currency::CAD,
-            Currency::AUD
+            Currency::AUD,
         ];
 
         foreach ($currencies as $currency) {
@@ -89,12 +95,14 @@ class CurrencyItemTest extends TestCase
         $currency = Currency::CNX;
         $array = $currency->toArray();
         $this->assertSame('CNX', $array['value']);
+        $this->assertIsString($array['label']);
         $this->assertStringContainsString('Chinese People', $array['label']);
         $this->assertStringContainsString('Bank Dollar', $array['label']);
 
         // 测试标签中包含空格和符号的货币
         $currency = Currency::UGS;
         $array = $currency->toArray();
+        $this->assertIsString($array['label']);
         $this->assertStringContainsString('(', $array['label']);
         $this->assertStringContainsString(')', $array['label']);
     }
