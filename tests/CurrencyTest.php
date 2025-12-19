@@ -49,7 +49,6 @@ final class CurrencyTest extends AbstractEnumTestCase
     public function testTryFromInvalidValue(): void
     {
         $result = Currency::tryFrom('INVALID');
-        /** @phpstan-ignore-next-line This test verifies expected null return behavior */
         $this->assertNull($result, 'tryFrom should return null for invalid currency code');
     }
 
